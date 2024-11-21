@@ -21,6 +21,32 @@ void ft_free(char **ptr)
     }
     
 }
+char *ft_get_the_line(char *res)
+{
+    char *res_line;
+    int i;
+
+    i = 0;
+    if (!res[i])
+        return (NULL);
+    while (res[i] && res[i] != '\n')
+        i++;
+    if (res[i] == '\n')
+        res_line = malloc((i + 2) * sizeof(char));
+    else
+        res_line =  malloc((i + 1) * sizeof(char));
+    if (!res_line)
+        return (NULL);
+    i = 0;
+    while (res[i] && res[i] != '\n')
+    {
+        res_line[i] = res[i];
+        i++;
+    }
+    if (res[i] && res[i] == '\n')
+        res_line[i++] = '\n';
+    return (res_line);
+}
 
 char  *ft_read_line(int fd, char *res) // put the line in the buffer 
 {
