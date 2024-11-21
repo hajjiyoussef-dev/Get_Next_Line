@@ -21,6 +21,28 @@ void ft_free(char **ptr)
     }
     
 }
+char *ft_get_the_next(char *res)
+{
+    int i;
+    int j;
+    char *line;
+
+    i = 0;
+    j = 0;
+    while (res[i] && res[i] != '\n')
+        i++;
+    if (!res[i])
+    {
+        ft_free(&res);
+        return (NULL);
+    }
+    line = malloc(((ft_strlen(res) - i) + 1) * sizeof(char));
+    i++;
+    while (res[i])
+        line[j++] = res[i++];
+    ft_free(&res);
+    return (line);
+}
 char *ft_get_the_line(char *res)
 {
     char *res_line;
@@ -45,6 +67,7 @@ char *ft_get_the_line(char *res)
     }
     if (res[i] && res[i] == '\n')
         res_line[i++] = '\n';
+    // res_line[i] = '\0';
     return (res_line);
 }
 
@@ -63,7 +86,7 @@ char  *ft_read_line(int fd, char *res) // put the line in the buffer
         bytes_read = read(fd, buffer, BUFFER_SIZE)  == -1 ;
         if (bytes_read == -1)
         {
-            ft_free(buffer);
+            ft_free(&buffer);
             ft_free(&res);
             return (NULL);
         }
@@ -85,7 +108,7 @@ char *get_next_line(int fd)
 
     if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0 )
     {
-        free(&res);
+        ft_free(&res);
         return (NULL);
     }
     res = ft_read_line(fd, res); // read the firest line in the fd 

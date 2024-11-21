@@ -20,10 +20,14 @@
 #define BUFFER_SIZE 10 
 #endif 
 
-char	*ft_strchr(const char *s, int c);
-char	*ft_strjoin(char const *s1, char const *s2);
-void	*ft_calloc(size_t count, size_t size);
-size_t	ft_strlen(const char *s);
+char    *ft_strchr(const char *s, int c);
+char    *ft_strjoin(char const *s1, char const *s2);
+size_t  ft_strlen(const char *s);
+char    *ft_strdup(const char *s1);
+char    *get_next_line(int fd);
+char    *ft_get_the_next(char *res);
+char    *ft_read_line(int fd, char *res);
+char    *ft_get_the_line(char *res);
 
 
 #endif
