@@ -10,12 +10,8 @@ int main(void)
 
     char *line ;
 
-     while ((line = get_next_line(fd)))
-    {
-        printf("Line: %s", line); 
-        free(line);              
-    }
-
-    close(fd); // Close the file
+    line = get_next_line(fd);
+        printf("Line: %s", line);             ;
+    close(fd);
     return (0);
 }
