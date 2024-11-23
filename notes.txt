@@ -1,0 +1,28 @@
+
+-------------------------------------------------
+==> GET_NEXT_LINE ==>
+
+ -> get_next_line project is an important one, as it teaches file reading and memory management
+
+ ------------------------------------------------
+==> a few key steps: ==> 
+
+1. Understand the Goal
+   .You need to write a function that reads a file line by line, even if the file has no newline characters.
+   .The function must work efficiently, even for very large files.
+
+2. Key Concepts
+   .Static Variables: These help you retain data between function calls.
+   .Buffer Management: You’ll need to handle partial reads and join buffers correctly.
+   .Dynamic Memory: Allocating, freeing, and avoiding leaks is critical.
+
+3. Helper Functions
+   .Since you’re already using ft_strlen, ft_strjoin, ft_strdup, ft_strchr,  focus on leveraging them efficiently to:
+   .Handle buffer manipulations.
+   .Search for newline characters.
+   .Manage strings properly.
+
+4. Start Small
+   .Begin with just reading the file in chunks.
+   .Then build logic to split lines from the buffer.
+   .Finally, handle edge cases like EOF and empty lines.
