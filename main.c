@@ -4,14 +4,22 @@
 #include <stdio.h> // For printf
 #include <stdlib.h>
 
+void f()
+{
+    system("leaks a.out");
+}
 int main(void)
 {
-    int fd = open("get_next_line.h", O_RDONLY);
+    int fd = open("test.txt", O_RDONLY);
 
     char *line ;
-
-    line = get_next_line(fd);
-        printf("Line: %s", line);             ;
+    atexit(f);
+   while ((line = get_next_line(fd)))
+   {
+        printf(" %s", line);
+        free(line);
+   }
+        
     close(fd);
     return (0);
 }
