@@ -52,20 +52,26 @@ static int get_line(char *buf, char **line)
     buffer_shifting(buf, (i + new_line));
     return (new_line);
 }
-int fill_buffer(int fd, char *buffer , char *line)
+int fill_buffer(int fd, char *buffer, char *line)
 {
     int bytes_read;
 
-    bytes_read = read(fd, buffer, BUFFER_SIZE);    
-    if (bytes_read <= 0)
+    bytes_read = read(fd, buffer, BUFFER_SIZE);
+    if (bytes_read < 0)
+    {
+        free(buffer);
+        if (*line)  
+            free(line);
+        line = NULL;
+        return (-1);
+    }
+    else if (bytes_read == 0)
     {
         buffer[0] = '\0';
         if (line && *line != '\0')
-            return (-1);
-        else
             return (-2);
+        return (-1);
     }
-    else
         buffer[bytes_read] = '\0';
     return (bytes_read);
 }
@@ -73,27 +79,31 @@ int fill_buffer(int fd, char *buffer , char *line)
 char *get_next_line(int fd)
 {
     static char buffer[BUFFER_SIZE + 1];
+    
     char *line;
-    int bytes_read;
+    int result;
     int line_finde;
 
     line_finde = 0;
     line = NULL;
     if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
-        return (NULL);
+        return (buffer[0] = '\0', NULL);
     while (1)
     {
         if (buffer[0] == '\0')
         {
-            bytes_read = fill_buffer(fd, buffer ,line);
-            if (bytes_read == -2)
-                return (free(line), NULL);
-            else if (bytes_read == -1)
+            result = fill_buffer(fd, buffer, line);
+            if (result == -1)
+                return (NULL);
+            else if (result == -2)
                 return (line);
         }
         line_finde = get_line(buffer, &line);
         if (line_finde == -1)
-            return (free(line), free(buffer), NULL);
+        {
+            free(buffer);
+            return (free(line), NULL);
+        }
         if (line_finde)
             return (line);
     }

@@ -11,16 +11,19 @@ void f()
 int main(void)
 {
     int fd = open("test.txt", O_RDONLY);
+    // close(fd);
 
     char *line ;
-    atexit(f);
-   while ((line = get_next_line(fd)))
-   {
-        printf(" %s", line);
-        free(line);
-   }
-        
-    close(fd);
+    //atexit(f);
+//    while ((line = get_next_line(fd)))
+//    {
+//         printf(" %s", line);
+//         free(line);
+//    }
+        printf("%s", get_next_line(3));
+        printf("%s", get_next_line(3));
+        printf("%s", get_next_line(3));
+        printf("%s", get_next_line(3));
     return (0);
 }
 

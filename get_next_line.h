@@ -17,7 +17,7 @@
 #include <stdlib.h>
 
 #ifndef BUFFER_SIZE
-#define BUFFER_SIZE 42
+#define BUFFER_SIZE 2147483646
 #endif
 
 char	*ft_strjoin(char const *s1, char const *s2);
