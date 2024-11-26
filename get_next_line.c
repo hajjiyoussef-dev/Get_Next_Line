@@ -13,98 +13,82 @@
 #include "get_next_line.h"
 #include "stdio.h"
 
-static void buffer_shifting(char *buf, int start)
+static char *the_next_line(char * res)
 {
     int i;
+    char *next_res;
 
     i = 0;
-    while (buf[start])
-    {
-
-        buf[i++] = buf[start++];
-    }
-    buf[i] = '\0';
-}
-
-static int get_line(char *buf, char **line)
-{
-    ssize_t i;
-    int new_line;
-    char *help_line;
-    char *new_help_line;
-
-    new_line = 0;
-    i = 0;
-    while (buf[i] && buf[i] != '\n')
+    if (!res)
+        return (NULL);
+    while (res[i] && res[i] != '\n')
         i++;
-    if (buf[i] == '\n')
-        new_line = 1;
-    help_line = ft_calloc((i + new_line + 1), sizeof(char));
-    if (!help_line)
-        return (-1);
-    ft_memcpy(help_line, buf, (i + new_line));
-    new_help_line = ft_strjoin(*line, help_line);
-    free(help_line);
-    if (!new_help_line)
-        return (free(*line), -1);
-    free(*line);
-    *line = new_help_line;
-    buffer_shifting(buf, (i + new_line));
-    return (new_line);
+    if (res[i] == '\0')
+        return (free(res), NULL);
+    next_res = ft_strdup((res + i + 1));
+    if (!next_res)
+        return(free(res), NULL);
+    free(res);
+    return (next_res);
 }
-int fill_buffer(int fd, char *buffer, char *line)
+static char *extract_line(char *res)
 {
-    int bytes_read;
+    int i;
+    int new_line;
+    char *line;
 
-    bytes_read = read(fd, buffer, BUFFER_SIZE);
-    if (bytes_read < 0)
+    i = 0;
+    new_line = 0;
+    if (!res || res[0] == '\0')
+        return (NULL);
+    while (res[i] && res[i] != '\n')
+        i++;
+    if (res[i] == '\n')
+        new_line = 1;
+    line = malloc((i + new_line + 1) * sizeof(char));
+    if (!line)
+        return (NULL);
+    ft_memcpy(line, res, (i + new_line));
+    line[i + new_line] = '\0';
+    return (line);
+}
+static char *read_end_find(int fd, char *buff, char *res)
+{
+    ssize_t read_byats;
+    int i;
+
+    while (1)
     {
-        free(buffer);
-        if (*line)  
-            free(line);
-        line = NULL;
-        return (-1);
+        read_byats = read(fd, buff, BUFFER_SIZE);
+        if (read_byats <= 0)
+            break;
+        buff[read_byats] = '\0';
+        res = ft_strjoin(res, buff);
+        if (!res)
+            return (NULL);
+        i = 0;
+        while (res[i] && res[i] == '\0')
+            break;
     }
-    else if (bytes_read == 0)
-    {
-        buffer[0] = '\0';
-        if (line && *line != '\0')
-            return (-2);
-        return (-1);
-    }
-        buffer[bytes_read] = '\0';
-    return (bytes_read);
+    return (res);
 }
 
 char *get_next_line(int fd)
 {
-    static char buffer[BUFFER_SIZE + 1];
-    
+    static char *res;
+    char *buff;
     char *line;
-    int result;
-    int line_finde;
 
-    line_finde = 0;
-    line = NULL;
-    if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
-        return (buffer[0] = '\0', NULL);
-    while (1)
-    {
-        if (buffer[0] == '\0')
-        {
-            result = fill_buffer(fd, buffer, line);
-            if (result == -1)
-                return (NULL);
-            else if (result == -2)
-                return (line);
-        }
-        line_finde = get_line(buffer, &line);
-        if (line_finde == -1)
-        {
-            free(buffer);
-            return (free(line), NULL);
-        }
-        if (line_finde)
-            return (line);
-    }
+    if (BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+        return (free(res), res = NULL);
+    buff = malloc((BUFFER_SIZE + 1) * sizeof(char));
+    if (!buff)
+        return (free(res), NULL);
+    res = read_end_find(fd, buff, res);
+    free(buff);
+    if (!res)
+        return (NULL);
+    line = extract_line(res);
+    res = the_next_line(res);
+    return (line);
 }
