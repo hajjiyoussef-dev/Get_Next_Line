@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yhajji <yhajji@student.42.fr>              #+#  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024-11-22 14:16:22 by yhajji            #+#    #+#             */
-/*   Updated: 2024-11-22 14:16:22 by yhajji           ###   ########.fr       */
+/*   Created: 2024-11-26 14:56:37 by yhajji            #+#    #+#             */
+/*   Updated: 2024-11-26 14:56:37 by yhajji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 static char *the_next_line(char * res)
 {
@@ -74,20 +74,20 @@ static char *read_end_find(int fd, char *buff, char *res)
 
 char *get_next_line(int fd)
 {
-    static char *res;
+    static char *res[MAX_OPEN];
     char *buff;
     char *line;
 
-    if (BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
-        return (free(res), res = NULL);
+    if ( fd < 0 || BUFFER_SIZE <= 0 || fd >= MAX_OPEN || read(fd, 0, 0) < 0)
+        return (free(res[fd]), res[fd] = NULL);
     buff = malloc((BUFFER_SIZE + 1) * sizeof(char));
     if (!buff)
-        return (free(res), NULL);
-    res = read_end_find(fd, buff, res);
+        return (free(res[fd]), NULL);
+    res[fd] = read_end_find(fd, buff, res[fd]);
     free(buff);
-    if (!res)
+    if (!res[fd])
         return (NULL);
-    line = extract_line(res);
-    res = the_next_line(res);
+    line = extract_line(res[fd]);
+    res[fd] = the_next_line(res[fd]);
     return (line);
 }
