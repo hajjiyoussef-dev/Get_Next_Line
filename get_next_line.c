@@ -78,9 +78,9 @@ char *get_next_line(int fd)
     char *buff;
     char *line;
 
-    if (BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+    if (BUFFER_SIZE <= 0 || BUFFER_SIZE > INT_MAX || read(fd, 0, 0) < 0)
         return (free(res), res = NULL);
-    buff = malloc((BUFFER_SIZE + 1) * sizeof(char));
+    buff = malloc(((size_t)BUFFER_SIZE + 1) * sizeof(char));
     if (!buff)
         return (free(res), NULL);
     res = read_end_find(fd, buff, res);

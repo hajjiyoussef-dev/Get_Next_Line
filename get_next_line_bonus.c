@@ -74,13 +74,13 @@ static char *read_end_find(int fd, char *buff, char *res)
 
 char *get_next_line(int fd)
 {
-    static char *res[MAX_OPEN];
+    static char *res[OPEN_MAX];
     char *buff;
     char *line;
 
-    if ( fd < 0 || BUFFER_SIZE <= 0 || fd >= MAX_OPEN || read(fd, 0, 0) < 0)
+    if ( fd < 0 || BUFFER_SIZE <= 0 || fd >= OPEN_MAX || read(fd, 0, 0) < 0)
         return (free(res[fd]), res[fd] = NULL);
-    buff = malloc((BUFFER_SIZE + 1) * sizeof(char));
+    buff = malloc(((size_t)BUFFER_SIZE + 1) * sizeof(char));
     if (!buff)
         return (free(res[fd]), NULL);
     res[fd] = read_end_find(fd, buff, res[fd]);

@@ -16,14 +16,12 @@
 
 #include <unistd.h>
 #include <stdlib.h>
+#include <limits.h>
 
 #ifndef BUFFER_SIZE
 #define BUFFER_SIZE 42
 #endif
 
-#ifndef MAX_OPEN
-#define MAX_OPEN 10240
-#endif
 
 char	*ft_strjoin(char  *s1, char  *s2);
 char	*ft_strdup(const char *s1);
