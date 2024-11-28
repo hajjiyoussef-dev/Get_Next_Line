@@ -18,13 +18,14 @@ size_t	ft_strlen(const char *s)
 
 	i = 0;
 	if (!s)
-        return (0);
+		return (0);
 	while (s[i] != '\0')
 	{
 		i++;
 	}
 	return (i);
 }
+
 char	*ft_strdup(const char *s1)
 {
 	char	*ptr;
@@ -32,7 +33,7 @@ char	*ft_strdup(const char *s1)
 
 	i = 0;
 	if (!s1)
-        return (NULL);
+		return (NULL);
 	ptr = malloc(sizeof(char) * (ft_strlen(s1) + 1));
 	if (!ptr)
 		return (NULL);
@@ -45,25 +46,26 @@ char	*ft_strdup(const char *s1)
 	return (ptr);
 }
 
-void *ft_memcpy(void *dest, const void *src, size_t n)
+void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
-    unsigned char *d;
-    unsigned char *s;
-    size_t i = 0;
+	unsigned char	*d;
+	unsigned char	*s;
+	size_t			i;
 
+	i = 0;
 	if (!dest || !src)
-        return (NULL);
+		return (NULL);
 	d = (unsigned char *)dest;
-    s = (unsigned char *)src;
-    while (i < n)
-    {
-        d[i] = s[i];
-        i++;
-    }
-    return dest;
+	s = (unsigned char *)src;
+	while (i < n)
+	{
+		d[i] = s[i];
+		i++;
+	}
+	return (dest);
 }
 
-char	*ft_strjoin(char  *s1, char  *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	size_t	lens;
 	size_t	i;
