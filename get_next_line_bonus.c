@@ -56,7 +56,6 @@ static char	*extract_line(char *res)
 static char	*read_end_find(int fd, char *buff, char *res)
 {
 	ssize_t	read_byats;
-	int		i;
 
 	while (1)
 	{
@@ -67,9 +66,6 @@ static char	*read_end_find(int fd, char *buff, char *res)
 		res = ft_strjoin(res, buff);
 		if (!res)
 			return (NULL);
-		i = 0;
-		while (res[i] && res[i] == '\0')
-			break ;
 	}
 	return (res);
 }
